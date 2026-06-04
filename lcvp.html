@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports LCM - LCVP Command Center</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body class="index-body">
+
+    <!-- Global WhatsApp Widget -->
+    <a href="https://wa.me/94704533048" target="_blank" class="whatsapp-widget">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px"><path d="M17.472...Z"/></svg>
+        <span>Message Duwasha</span>
+    </a>
+
+    <div class="split-layout">
+        
+        <!-- Left Side: Dynamic Visualizer -->
+        <div class="delegate-mascot-zone slide-in-left" id="visual-zone">
+            
+            <div id="default-branding">
+                <img src="assets/logo.png" alt="Sports LCM Logo" class="brand-logo floating">
+                <h1>COMMAND <br><span class="text-glow">CENTER</span></h1>
+                <p class="hype-text" style="font-size: 14px;">Secure your faction's identity. No second chances.</p>
+            </div>
+
+            <!-- This activates when they start selecting options -->
+            <div id="dynamic-theme-box" class="hidden" style="width: 100%;">
+                <h2 id="live-fo-title" style="color: var(--text-muted); font-size: 1.2rem; margin-bottom: 20px;">DRAFTING IDENTITY...</h2>
+                <img id="team-mascot-img" src="" alt="Team Mascot" class="giant-mascot hidden">
+                <div class="team-badge" id="team-name-display" style="color: var(--accent-color);">TEAM NAME</div>
+            </div>
+        </div>
+
+        <!-- Right Side: Action Panel -->
+        <div class="action-panel slide-in-right">
+            
+            <!-- Phase 1: Authentication -->
+            <div id="login-container">
+                <h2>AUTHORIZATION <span class="text-glow">REQUIRED</span></h2>
+                <p class="subtitle" style="margin-bottom: 30px;">Enter your LCVP passcode to access the drafting board.</p>
+                
+                <div class="form-group">
+                    <label>Access Key</label>
+                    <input type="password" id="fo-password" placeholder="Passcode..." style="margin-bottom: 20px;">
+                </div>
+                <button id="login-btn">AUTHENTICATE</button>
+                <p id="login-error" class="error-text hidden">Access Denied. Invalid Key.</p>
+                
+                <hr class="divider">
+                <button class="outline-btn" onclick="window.location.href='index.html'">BACK TO ARENA GATES</button>
+            </div>
+
+            <!-- Phase 2: The Registration Form -->
+            <div id="registration-container" class="hidden">
+                <h2 id="welcome-text">WELCOME, <span class="text-glow">LCVP</span></h2>
+                
+                <form id="team-form">
+                    <div class="form-group">
+                        <label>Confirm Identity</label>
+                        <select id="lcvp-name" required>
+                            <option value="" disabled selected>Select your name...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Team Name</label>
+                        <input type="text" id="team-name" placeholder="E.g., The Phoenix Strikers" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Claim Color</label>
+                        <div class="color-picker" id="color-picker">
+                            <div class="color-swatch" data-color="Red" style="background-color: #e74c3c;" title="Red"></div>
+                            <div class="color-swatch" data-color="Blue" style="background-color: #3498db;" title="Blue"></div>
+                            <div class="color-swatch" data-color="Green" style="background-color: #2ecc71;" title="Green"></div>
+                            <div class="color-swatch" data-color="Yellow" style="background-color: #f1c40f;" title="Yellow"></div>
+                            <div class="color-swatch" data-color="Orange" style="background-color: #e67e22;" title="Orange"></div>
+                            <div class="color-swatch" data-color="Cyan" style="background-color: #00bcd4;" title="Cyan"></div>
+                            <div class="color-swatch" data-color="White" style="background-color: #ffffff; border: 1px solid #333;" title="White"></div>
+                            <div class="color-swatch" data-color="Black" style="background-color: #7f8c8d;" title="Black"></div>
+                        </div>
+                        <input type="hidden" id="team-color" required>
+                        <p id="color-error" class="error-text hidden" style="margin-top: 5px;">You must claim a color.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Claim Mascot</label>
+                        <select id="team-mascot" required>
+                            <option value="" disabled selected>Select a mascot...</option>
+                            <option value="Panthers">Panthers</option>
+                            <option value="Tigers">Tigers</option>
+                            <option value="Elephant">Elephant</option>
+                            <option value="Stallion">Stallion</option>
+                            <option value="Phoenix">Phoenix</option>
+                            <option value="Raven">Raven</option>
+                            <option value="Wolf">Wolf</option>
+                            <option value="Fox">Fox</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submit-btn" style="margin-top: 15px;">LOCK IN IDENTITY</button>
+                    <p id="success-message" class="success-text hidden">Identity Locked. May the best faction win.</p>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/lcvp.js"></script>
+</body>
+</html>

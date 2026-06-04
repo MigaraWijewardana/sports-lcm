@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports LCM - Delegate Registration</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <a href="https://wa.me/94704533048" target="_blank" class="whatsapp-widget">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px"><path d="M17.472...Z"/></svg>
+        <span>Message Duwasha</span>
+    </a>
+
+    <div class="split-layout">
+        
+        <div class="delegate-mascot-zone slide-in-left">
+            <h2 style="font-size: 1.5rem; color: var(--text-muted);" id="entity-title">LOADING FACTION...</h2>
+            
+            <div id="dynamic-theme-box" class="hidden">
+                <img id="team-mascot-img" src="" alt="Team Mascot" class="giant-mascot">
+                <div class="team-badge" id="team-name-display">TEAM NAME</div>
+            </div>
+            
+            <div id="default-theme-box">
+                <img src="assets/logo.png" alt="Sports LCM" class="giant-mascot" style="border-radius: 50%; box-shadow: 0 0 50px rgba(255,255,255,0.1);">
+            </div>
+        </div>
+
+        <div class="action-panel slide-in-right">
+            <h2>SECURE YOUR <span class="text-glow">ROSTER SPOT</span></h2>
+            
+            <form id="delegate-form">
+                <div class="button-grid">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" id="first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="last-name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="text" id="whatsapp" required>
+                </div>
+
+                <div class="button-grid">
+                    <div class="form-group" id="subteam-group">
+                        <label>Sub-Team</label>
+                        <select id="sub-team" required>
+                            <option value="" disabled selected>Select...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Role</label>
+                        <select id="role" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="Member">Member</option>
+                            <option value="Team Leader">Team Leader</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dietary Preference</label>
+                    <select id="diet" required>
+                        <option value="" disabled selected>Select...</option>
+                        <option value="Veg">Vegetarian</option>
+                        <option value="Non-Veg">Non-Vegetarian</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin: 25px 0;">
+                    <input type="checkbox" id="confirmation" required style="width: 20px; height: 20px;">
+                    <label for="confirmation" style="margin: 0; text-transform: none; font-size: 14px; color: #fff;">
+                        I am ready to awaken my competitiveness and confirm my participation.
+                    </label>
+                </div>
+
+                <button type="submit" id="submit-btn" style="width: 100%;">JOIN THE ROSTER</button>
+                <p id="success-message" style="color: #2ecc71; text-align: center; margin-top: 15px; font-weight: bold;" class="hidden">Registration Successful!</p>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/firebase.js"></script>
+    <script src="js/delegate.js"></script>
+</body>
+</html>

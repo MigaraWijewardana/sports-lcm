@@ -3,7 +3,7 @@
 
 @font-face {
     font-family: 'Freshman';
-    src: local('Freshman'), url('../assets/freshman.ttf') format('truetype');
+    src: local('Freshman'), url('../assets/Freshman.ttf') format('truetype');
 }
 
 /* --- Core Variables --- */

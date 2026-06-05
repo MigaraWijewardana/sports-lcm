@@ -70,10 +70,42 @@ body::before {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
 }
+/* --- Global WhatsApp Widget --- */
+.whatsapp-widget {
+    position: fixed;
+    bottom: 25px;
+    right: 25px; /* Changed from left to right */
+    background: rgba(37, 211, 102, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(37, 211, 102, 0.4);
+    color: #25D366;
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
 .whatsapp-widget:hover {
     background: rgba(37, 211, 102, 0.3);
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(37, 211, 102, 0.2);
+}
+
+/* Make sure to also update the media query at the very bottom of your CSS file */
+@media (max-width: 992px) {
+    .split-layout { flex-direction: column; }
+    h1 { font-size: 2.5rem; }
+    .giant-mascot { max-width: 250px; }
+    .whatsapp-widget { bottom: 15px; right: 15px; padding: 10px 15px; } /* Changed to right: 15px */
+    .whatsapp-widget span { display: none; } 
+}
 }
 
 /* --- Split Layout Architecture --- */

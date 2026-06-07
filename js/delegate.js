@@ -58,6 +58,23 @@ if (subTeams[entity]) {
 }
 
 async function applyTeamTheme() {
+    // 1. Override for EB Griffins
+    if (entity === "EB") {
+        themeBox.classList.remove('hidden');
+        defaultBox.classList.add('hidden');
+        
+        teamNameDisplay.innerText = "EB GRIFFINS";
+        // Make sure you drop 'griffin.png' into your assets folder!
+        teamMascotImg.src = `assets/griffin.png`; 
+
+        const theme = themeColors["Yellow"]; // Using the Gold/Yellow theme
+        document.documentElement.style.setProperty('--accent-color', theme.main);
+        document.documentElement.style.setProperty('--primary-color', theme.main);
+        document.documentElement.style.setProperty('--bg-dark', theme.darkBg);
+        return; // Stop here so it doesn't check the database
+    }
+
+    // 2. Standard Database Lookup for FOs
     if (["iGV", "iGT", "oGV", "oGT"].includes(entity)) {
         try {
             const doc = await db.collection("teams").doc(entity).get();
@@ -73,7 +90,6 @@ async function applyTeamTheme() {
 
                 const theme = themeColors[teamData.color] || themeColors["White"];
                 
-                // Aggressively inject the Faction's color into the CSS root variables
                 document.documentElement.style.setProperty('--accent-color', theme.main);
                 document.documentElement.style.setProperty('--primary-color', theme.main);
                 document.documentElement.style.setProperty('--bg-dark', theme.darkBg);
@@ -83,9 +99,6 @@ async function applyTeamTheme() {
         }
     }
 }
-
-applyTeamTheme();
-
 delegateForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     submitBtn.innerText = "PROCESSING...";

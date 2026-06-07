@@ -178,5 +178,62 @@ teamForm.addEventListener("submit", async (e) => {
         console.error("Error adding document: ", error);
         submitBtn.innerText = "SYSTEM ERROR. RETRY.";
         submitBtn.disabled = false;
+
+        // --- 5. Firebase Real-Time Lockout Logic ---
+function listenToTakenOptions() {
+    db.collection("teams").onSnapshot((snapshot) => {
+        const takenColors = [];
+        const takenMascots = [];
+        let isAlreadyRegistered = false;
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            // Check if the current FO has already registered
+            if (doc.id === currentFO) {
+                isAlreadyRegistered = true;
+            } else {
+                takenColors.push(data.color);
+                takenMascots.push(data.mascot);
+            }
+        });
+
+        // Trigger Lockout if they already registered
+        if (isAlreadyRegistered) {
+            teamForm.classList.add("hidden");
+            document.getElementById("welcome-text").innerHTML = `<span style="color: #ff4757;">ALREADY REGISTERED</span>`;
+            document.getElementById("live-fo-title").innerText = `${currentFO} IDENTITY LOCKED`;
+            
+            // Create the lockout message if it doesn't exist
+            if (!document.getElementById("already-reg-msg")) {
+                const msg = document.createElement("p");
+                msg.id = "already-reg-msg";
+                msg.className = "error-text";
+                msg.style.marginTop = "20px";
+                msg.style.fontSize = "16px";
+                msg.innerHTML = "Your team's identity has already been locked in.<br>You cannot register twice.";
+                teamForm.parentElement.appendChild(msg);
+            }
+            return; // Halt further form logic
+        }
+
+        // Standard lockout for colors/mascots taken by OTHER teams
+        colorSwatches.forEach(swatch => {
+            const swatchColor = swatch.getAttribute('data-color');
+            if (takenColors.includes(swatchColor)) {
+                swatch.classList.add('taken');
+                swatch.classList.remove('selected');
+                if (teamColorInput.value === swatchColor) teamColorInput.value = ""; 
+            }
+        });
+
+        Array.from(mascotSelect.options).forEach(option => {
+            if (option.value && takenMascots.includes(option.value)) {
+                option.disabled = true;
+                option.innerText = `${option.value} (TAKEN)`;
+            }
+        });
+    });
+}
     }
 });

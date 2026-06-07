@@ -31,14 +31,12 @@ const teamNameInput = document.getElementById("team-name");
 const mascotSelect = document.getElementById("team-mascot");
 const successMessage = document.getElementById("success-message");
 
-// Live Visualizer Elements
 const defaultBranding = document.getElementById("default-branding");
 const dynamicThemeBox = document.getElementById("dynamic-theme-box");
 const liveFoTitle = document.getElementById("live-fo-title");
 const mascotImage = document.getElementById("team-mascot-img");
 const teamNameDisplay = document.getElementById("team-name-display");
 
-// Swatch Elements
 const colorSwatches = document.querySelectorAll('.color-swatch');
 const teamColorInput = document.getElementById('team-color');
 const colorError = document.getElementById('color-error');
@@ -46,6 +44,8 @@ const colorError = document.getElementById('color-error');
 // --- 1. Login Logic ---
 loginBtn.addEventListener("click", () => {
     const enteredPass = passInput.value.trim();
+    
+    // Remember: Passwords are exactly case-sensitive!
     if (authData[enteredPass]) {
         currentFO = authData[enteredPass].fo;
         const lcvpList = authData[enteredPass].lcvps;
@@ -54,6 +54,9 @@ loginBtn.addEventListener("click", () => {
         regContainer.classList.remove("hidden");
         welcomeText.innerHTML = `WELCOME, <span class="text-glow">${currentFO}</span>`;
         liveFoTitle.innerText = `${currentFO} COMMANDER ACTIVE`;
+        
+        // Reset dropdown to prevent duplicates if logged in multiple times
+        lcvpSelect.innerHTML = '<option value="" disabled selected>Select your name...</option>';
         
         lcvpList.forEach(name => {
             const option = document.createElement("option");
@@ -109,7 +112,7 @@ mascotSelect.addEventListener('change', (e) => {
     }
 });
 
-        // --- 5. Firebase Real-Time Lockout Logic ---
+// --- 5. Firebase Real-Time Lockout Logic ---
 function listenToTakenOptions() {
     db.collection("teams").onSnapshot((snapshot) => {
         const takenColors = [];
@@ -119,7 +122,7 @@ function listenToTakenOptions() {
         snapshot.forEach((doc) => {
             const data = doc.data();
             
-            // Check if the current FO has already registered
+            // Lock out the current FO if they already registered a team
             if (doc.id === currentFO) {
                 isAlreadyRegistered = true;
             } else {
@@ -128,13 +131,11 @@ function listenToTakenOptions() {
             }
         });
 
-        // Trigger Lockout if they already registered
         if (isAlreadyRegistered) {
             teamForm.classList.add("hidden");
             document.getElementById("welcome-text").innerHTML = `<span style="color: #ff4757;">ALREADY REGISTERED</span>`;
             document.getElementById("live-fo-title").innerText = `${currentFO} IDENTITY LOCKED`;
             
-            // Create the lockout message if it doesn't exist
             if (!document.getElementById("already-reg-msg")) {
                 const msg = document.createElement("p");
                 msg.id = "already-reg-msg";
@@ -144,10 +145,9 @@ function listenToTakenOptions() {
                 msg.innerHTML = "Your team's identity has already been locked in.<br>You cannot register twice.";
                 teamForm.parentElement.appendChild(msg);
             }
-            return; // Halt further form logic
+            return; 
         }
 
-        // Standard lockout for colors/mascots taken by OTHER teams
         colorSwatches.forEach(swatch => {
             const swatchColor = swatch.getAttribute('data-color');
             if (takenColors.includes(swatchColor)) {
@@ -165,5 +165,42 @@ function listenToTakenOptions() {
         });
     });
 }
+
+// --- 6. Form Submission Logic ---
+teamForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!teamColorInput.value) {
+        colorError.classList.remove('hidden');
+        return;
+    }
+
+    const selectedLCVP = lcvpSelect.value;
+    const teamName = teamNameInput.value.trim();
+    const selectedColor = teamColorInput.value;
+    const selectedMascot = mascotSelect.value;
+    const submitBtn = document.getElementById("submit-btn");
+
+    submitBtn.innerText = "ENCRYPTING DATA...";
+    submitBtn.disabled = true;
+
+    try {
+        await db.collection("teams").doc(currentFO).set({
+            registeredBy: selectedLCVP,
+            fo: currentFO,
+            teamName: teamName,
+            color: selectedColor,
+            mascot: selectedMascot,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        teamForm.reset();
+        submitBtn.classList.add("hidden");
+        successMessage.classList.remove("hidden");
+        
+    } catch (error) {
+        console.error("Error adding document: ", error);
+        submitBtn.innerText = "SYSTEM ERROR. RETRY.";
+        submitBtn.disabled = false;
     }
 });

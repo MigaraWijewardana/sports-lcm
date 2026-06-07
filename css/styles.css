@@ -195,20 +195,22 @@ h2 {
     align-items: center;
     gap: 10px;
     padding: 14px 24px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     color: #fff;
     text-decoration: none;
     border-radius: 12px;
     font-weight: 600;
     width: fit-content;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .pdf-btn:hover { 
     background: var(--accent-color); 
     color: #000; 
+    border-color: var(--accent-color);
     transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(255, 184, 28, 0.2);
 }
 
 .pdf-btn svg { width: 20px; height: 20px; }
@@ -243,17 +245,34 @@ button:disabled {
     transform: none !important;
 }
 
+/* Subtle Breathing Glow for Faction Buttons */
 .faction-btn { 
-    background: rgba(255, 255, 255, 0.05); 
+    background: rgba(255, 255, 255, 0.03); 
     color: #fff; 
-    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+.faction-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,184,28,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.faction-btn:hover::before { opacity: 1; }
+
 .faction-btn:hover { 
-    background: var(--primary-color); 
-    color: #fff; 
+    background: rgba(86, 18, 105, 0.6); /* Deep Amethyst tint */
+    color: var(--accent-color); 
     border-color: var(--accent-color); 
-    box-shadow: 0 10px 30px var(--primary-color); 
+    box-shadow: 0 0 20px rgba(255, 184, 28, 0.15); 
+    transform: translateY(-3px);
 }
 
 .alt-btn { border-style: dashed; }
@@ -268,12 +287,13 @@ button:disabled {
 .outline-btn:hover { 
     background: var(--primary-color); 
     color: #fff; 
+    box-shadow: 0 10px 25px rgba(86, 18, 105, 0.4);
 }
 
 .divider { 
     border: 0; 
     height: 1px; 
-    background: rgba(255, 255, 255, 0.1); 
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent); 
     margin: 30px 0; 
 }
 
@@ -316,132 +336,85 @@ select option {
     color: #fff; 
 }
 
-/* --- Giant Delegate/LCVP Mascot Zone --- */
+/* --- Giant Mascot Zone --- */
 .delegate-mascot-zone {
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    text-align: center;
+    flex: 1; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; text-align: center;
 }
 
 .giant-mascot {
-    max-width: 400px; 
-    width: 100%; 
+    max-width: 400px; width: 100%; 
     filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
-    animation: float 5s ease-in-out infinite; 
+    animation: float 6s ease-in-out infinite; /* Slowed down for subtlety */
     margin-bottom: 30px;
 }
 
 .team-badge {
-    font-family: 'Freshman', sans-serif; 
-    font-size: 3rem; 
-    color: #fff;
-    text-shadow: 0 5px 15px rgba(0,0,0,0.5); 
-    letter-spacing: 2px;
+    font-family: 'Freshman', sans-serif; font-size: 3rem; color: #fff;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.5); letter-spacing: 2px;
 }
 
-/* --- LCVP Color Picker Swatches --- */
-.color-picker { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 12px; 
-    margin-top: 10px; 
-}
-
+/* --- Color Picker Swatches --- */
+.color-picker { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
 .color-swatch {
-    width: 45px; 
-    height: 45px; 
-    border-radius: 12px;
-    cursor: pointer; 
+    width: 45px; height: 45px; border-radius: 12px; cursor: pointer; 
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
-    border: 2px solid transparent; 
-    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); border: 2px solid transparent; position: relative;
 }
-
-.color-swatch:hover { 
-    transform: translateY(-4px) scale(1.05); 
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); 
-}
-
-.color-swatch.selected {
-    border: 3px solid #fff; 
-    transform: scale(1.15); 
-    box-shadow: 0 0 20px var(--accent-color);
-}
-
-.color-swatch.taken {
-    opacity: 0.15; 
-    cursor: not-allowed; 
-    pointer-events: none; 
-    filter: grayscale(100%);
-}
-
+.color-swatch:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); }
+.color-swatch.selected { border: 3px solid #fff; transform: scale(1.15); box-shadow: 0 0 20px var(--accent-color); }
+.color-swatch.taken { opacity: 0.15; cursor: not-allowed; pointer-events: none; filter: grayscale(100%); }
 .color-swatch.taken::after {
-    content: '✕'; 
-    position: absolute; 
-    top: 50%; 
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: bold; 
-    font-size: 20px;
+    content: '✕'; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.8);
+    font-weight: bold; font-size: 20px;
 }
 
-/* --- Utility Classes --- */
+/* --- Utility & Animations --- */
 .hidden { display: none !important; }
 .error-text { color: #ff4757; font-size: 13px; font-weight: 500; text-align: center; }
 .success-text { color: #2ed573; font-size: 15px; font-weight: 600; text-align: center; margin-top: 15px; }
 
-/* --- Animations --- */
-@keyframes float { 
-    0% { transform: translateY(0px); } 
-    50% { transform: translateY(-20px); } 
-    100% { transform: translateY(0px); } 
-}
+@keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+@keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.01); } 100% { opacity: 0.8; } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
 
-@keyframes pulse { 
-    0% { opacity: 0.8; } 
-    50% { opacity: 1; transform: scale(1.02); } 
-    100% { opacity: 0.8; } 
-}
-
-@keyframes slideInLeft { 
-    from { opacity: 0; transform: translateX(-50px); } 
-    to { opacity: 1; transform: translateX(0); } 
-}
-
-@keyframes slideInRight { 
-    from { opacity: 0; transform: translateX(50px); } 
-    to { opacity: 1; transform: translateX(0); } 
-}
-
-.floating { animation: float 4s ease-in-out infinite; }
+.floating { animation: float 5s ease-in-out infinite; }
 .slide-in-left { animation: slideInLeft 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 .slide-in-right { animation: slideInRight 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
-/* --- Responsive Design --- */
+/* --- True Mobile Responsiveness --- */
 @media (max-width: 992px) {
     .split-layout { 
         flex-direction: column; 
-        padding: 20px;
+        padding: 20px 15px;
+        gap: 30px;
     }
     
-    h1 { font-size: 2.5rem; }
-    h2 { font-size: 2rem; }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
     
-    .giant-mascot { max-width: 250px; }
+    .brand-logo { max-width: 120px; margin-bottom: 20px; }
+    .giant-mascot { max-width: 200px; }
+    .team-badge { font-size: 2rem; }
     
-    .vm-grid { grid-template-columns: 1fr; }
-    .button-grid { grid-template-columns: 1fr; }
+    .action-panel { padding: 30px 20px; border-radius: 16px; }
+    .scrollable-info { max-height: none; margin-bottom: 20px; }
+    
+    .vm-grid { grid-template-columns: 1fr; gap: 15px; }
+    
+    /* Keep buttons side-by-side if small, stack if very small screens */
+    .button-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    
+    button, .faction-btn { padding: 15px; font-size: 16px; }
     
     .whatsapp-widget { 
         bottom: 15px; 
         right: 15px; 
-        padding: 10px 15px; 
+        padding: 12px; 
+        border-radius: 50%; /* Make it a circle on mobile */
     }
-    
     .whatsapp-widget span { display: none; } 
+    .whatsapp-widget svg { margin: 0; }
 }

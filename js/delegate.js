@@ -1,3 +1,4 @@
+// --- Sub-team Data Architecture ---
 const subTeams = {
     "iGV": ["iGV B2B", "iGV CXP", "iGV M & IR", "Other"],
     "iGT": ["iGT B2B & CXP", "iGT M & IR", "Other"],
@@ -7,7 +8,7 @@ const subTeams = {
     "Alumni": ["Alumni"]
 };
 
-// Advanced Dark Mode Tinting based on selected color
+// --- Advanced Dark Mode Tinting ---
 const themeColors = {
     "Red": { main: "#e74c3c", darkBg: "#1a0505" },
     "Blue": { main: "#3498db", darkBg: "#050a1a" },
@@ -19,8 +20,9 @@ const themeColors = {
     "Black": { main: "#7f8c8d", darkBg: "#000000" }
 };
 
+// --- URL Parsing & DOM Setup ---
 const urlParams = new URLSearchParams(window.location.search);
-const entity = urlParams.get('entity') || "Unknown";
+const entity = urlParams.get('entity') || "Unknown"; 
 
 const entityTitle = document.getElementById('entity-title');
 const subTeamSelect = document.getElementById('sub-team');
@@ -34,12 +36,14 @@ const defaultBox = document.getElementById('default-theme-box');
 const teamNameDisplay = document.getElementById('team-name-display');
 const teamMascotImg = document.getElementById('team-mascot-img');
 
+// Set the Title
 if (entity === "EB" || entity === "Alumni") {
     entityTitle.innerText = `SPORTS LCM ${entity.toUpperCase()}`;
 } else {
     entityTitle.innerText = `${entity} DELEGATE`;
 }
 
+// Populate Sub-teams dynamically
 if (subTeams[entity]) {
     if (entity === "EB" || entity === "Alumni") {
         subTeamGroup.classList.add('hidden');
@@ -55,26 +59,30 @@ if (subTeams[entity]) {
             subTeamSelect.appendChild(option);
         });
     }
+} else {
+    entityTitle.innerText = "INVALID LINK";
+    submitBtn.disabled = true;
 }
 
+// --- Fetch & Apply Team Identity ---
 async function applyTeamTheme() {
-    // 1. Override for EB Griffins
+    
+    // THE EB GRIFFINS OVERRIDE
     if (entity === "EB") {
         themeBox.classList.remove('hidden');
         defaultBox.classList.add('hidden');
         
         teamNameDisplay.innerText = "EB GRIFFINS";
-        // Make sure you drop 'griffin.png' into your assets folder!
-        teamMascotImg.src = `assets/griffin.png`; 
+        teamMascotImg.src = `assets/griffin.png`; // Make sure griffin.png is in your assets folder!
 
-        const theme = themeColors["Yellow"]; // Using the Gold/Yellow theme
+        const theme = themeColors["Yellow"]; // Hardcoded Gold/Yellow theme for EB
         document.documentElement.style.setProperty('--accent-color', theme.main);
         document.documentElement.style.setProperty('--primary-color', theme.main);
         document.documentElement.style.setProperty('--bg-dark', theme.darkBg);
-        return; // Stop here so it doesn't check the database
+        return; 
     }
 
-    // 2. Standard Database Lookup for FOs
+    // Standard Database Lookup for Main FOs
     if (["iGV", "iGT", "oGV", "oGT"].includes(entity)) {
         try {
             const doc = await db.collection("teams").doc(entity).get();
@@ -93,15 +101,22 @@ async function applyTeamTheme() {
                 document.documentElement.style.setProperty('--accent-color', theme.main);
                 document.documentElement.style.setProperty('--primary-color', theme.main);
                 document.documentElement.style.setProperty('--bg-dark', theme.darkBg);
+            } else {
+                entityTitle.innerText = `${entity} IDENTITY NOT YET LOCKED`;
             }
         } catch (error) {
             console.error("Error fetching team data:", error);
         }
     }
 }
+
+applyTeamTheme();
+
+// --- Handle Delegate Registration ---
 delegateForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    submitBtn.innerText = "PROCESSING...";
+
+    submitBtn.innerText = "ENCRYPTING DATA...";
     submitBtn.disabled = true;
 
     const delegateData = {
@@ -123,7 +138,7 @@ delegateForm.addEventListener("submit", async (e) => {
         successMessage.classList.remove("hidden");
     } catch (error) {
         console.error("Error registering delegate: ", error);
-        submitBtn.innerText = "ERROR. TRY AGAIN.";
+        submitBtn.innerText = "SYSTEM ERROR. RETRY.";
         submitBtn.disabled = false;
     }
 });
